@@ -1,0 +1,35 @@
+#日志级别
+logging:
+  level:
+    com.pikaqiu.gateway: debug
+
+eureka:
+  client:
+    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://172.18.0.3:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+          lower-case-service-id: true
+      routes:
+        - id: weixin-applet-service
+          uri: lb://weixin-applet-service
+          predicates:
+            - Path=/weixin/v1.0/**
+          filters:
+            - StripPrefix=2
+        - id: notice-service
+          uri: lb://notice-service
+          predicates:
+            - Path=/notice/v1.0/**
+          filters:
+            - StripPrefix=2
+
+
